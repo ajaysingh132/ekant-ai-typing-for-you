@@ -1,1036 +1,296 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ekaant International AI Typing System</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;600;700;800&family=Noto+Sans+Devanagari:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#080808">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Ekaant AI Typing System</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=Syne:wght@400;600;700;800&family=Noto+Sans+Devanagari:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --gold: #C9A84C;
-    --gold-light: #E8C97A;
-    --gold-dim: #7a6530;
-    --black: #080808;
-    --dark: #0f0f0f;
-    --surface: #161616;
-    --surface2: #1e1e1e;
-    --text: #e8e2d4;
-    --muted: #7a7060;
-    --white: #f5f0e8;
-  }
+:root{
+  --gold:#C9A84C;--gold-l:#E8C97A;--gold-d:#7a6530;
+  --black:#080808;--dark:#0f0f0f;--surf:#161616;--surf2:#1e1e1e;
+  --text:#e8e2d4;--muted:#7a7060;--white:#f5f0e8;
+  --green:#27ae60;--red:#e74c3c;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--black);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh;overflow-x:hidden;}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:rgba(8,8,8,.97);backdrop-filter:blur(20px);border-bottom:1px solid #1e1e1e;}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;color:var(--gold-l);letter-spacing:.1em;}
+.nav-logo small{font-size:.62rem;color:var(--muted);font-style:italic;display:block;}
+.nav-btn{background:var(--gold);color:var(--black);border:none;padding:9px 18px;font-family:'Syne',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.12em;cursor:pointer;border-radius:3px;}
 
-  html { scroll-behavior: smooth; }
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:90px 22px 60px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 80% 50%,rgba(201,168,76,.07),transparent 70%);}
+.badge{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--gold-d);padding:6px 14px;width:fit-content;margin-bottom:24px;border-radius:2px;animation:up .7s both;}
+.bdot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 1.5s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+.badge span{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-l);}
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,11vw,5rem);font-weight:300;line-height:1.05;animation:up .8s .08s both;}
+h1 em{font-style:italic;color:var(--gold-l);}
+h1 .hi{font-family:'Noto Sans Devanagari',sans-serif;font-size:.44em;color:var(--muted);display:block;margin-bottom:4px;}
+.hsub{margin-top:18px;max-width:460px;color:var(--muted);font-size:.84rem;line-height:1.8;font-family:'Noto Sans Devanagari',sans-serif;font-weight:300;animation:up .9s .15s both;}
+.hbtn{margin-top:32px;display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--black);border:none;padding:13px 32px;font-family:'Syne',sans-serif;font-size:.74rem;font-weight:700;letter-spacing:.16em;cursor:pointer;border-radius:3px;animation:up 1s .2s both;transition:background .2s;}
+.hbtn:hover{background:var(--gold-l);}
+@keyframes up{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
 
-  body {
-    background: var(--black);
-    color: var(--text);
-    font-family: 'Syne', sans-serif;
-    overflow-x: hidden;
-    cursor: none;
-  }
+/* ===== TOOLS ===== */
+#tools{scroll-margin-top:56px;}
+.tools{padding:60px 20px 80px;background:var(--dark);}
+.slabel{font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-d);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.slabel::before{content:'';width:18px;height:1px;background:var(--gold-d);}
+.stitle{font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,6vw,2.6rem);font-weight:300;line-height:1.1;margin-bottom:28px;}
+.stitle em{font-style:italic;color:var(--gold-l);}
 
-  /* Custom Cursor */
-  .cursor {
-    position: fixed;
-    width: 10px; height: 10px;
-    background: var(--gold);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: transform 0.1s, width 0.3s, height 0.3s, opacity 0.3s;
-    mix-blend-mode: difference;
-  }
-  .cursor-ring {
-    position: fixed;
-    width: 36px; height: 36px;
-    border: 1px solid var(--gold-dim);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: transform 0.18s ease-out, width 0.3s, height 0.3s;
-  }
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;margin-bottom:20px;}
+.tab{background:var(--surf);border:none;color:var(--muted);padding:12px 4px;font-family:'Syne',sans-serif;font-size:.62rem;font-weight:600;letter-spacing:.06em;cursor:pointer;border-radius:4px;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.tab-ico{font-size:1.3rem;}
+.tab.active{background:var(--gold);color:var(--black);}
+.tab:not(.active):hover{background:var(--surf2);color:var(--text);}
 
-  /* Grain overlay */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9990;
-    opacity: 0.5;
-  }
+.panel{display:none;animation:up .3s both;}
+.panel.active{display:block;}
 
-  /* NAV */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 28px 60px;
-    background: linear-gradient(to bottom, rgba(8,8,8,0.95) 0%, transparent 100%);
-    backdrop-filter: blur(12px);
-  }
+.card{background:var(--surf);border:1px solid #252525;border-radius:8px;overflow:hidden;}
+.card-h{padding:18px 20px;border-bottom:1px solid #252525;display:flex;align-items:center;gap:12px;}
+.card-ico{width:38px;height:38px;background:var(--surf2);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.card-t{font-size:.9rem;font-weight:700;color:var(--white);}
+.card-s{font-size:.68rem;color:var(--muted);margin-top:2px;font-family:'Noto Sans Devanagari',sans-serif;}
+.card-b{padding:20px;}
 
-  .nav-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.3rem;
-    font-weight: 600;
-    letter-spacing: 0.15em;
-    color: var(--gold-light);
-  }
-  .nav-logo span { color: var(--muted); font-style: italic; font-size: 0.85em; }
+/* ===== PERMISSION GATE ===== */
+.gate{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:44px 20px;text-align:center;gap:14px;}
+.gate-icon{font-size:3.8rem;line-height:1;}
+.gate-chip{display:inline-block;background:rgba(201,168,76,.1);border:1px solid var(--gold-d);color:var(--gold-l);font-size:.58rem;letter-spacing:.15em;padding:4px 12px;border-radius:20px;text-transform:uppercase;}
+.gate-title{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:600;color:var(--white);}
+.gate-desc{font-size:.79rem;color:var(--muted);line-height:1.75;max-width:300px;font-family:'Noto Sans Devanagari',sans-serif;font-weight:300;}
 
-  .nav-links {
-    display: flex;
-    gap: 40px;
-    list-style: none;
-  }
-  .nav-links a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 0.75rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    transition: color 0.3s;
-  }
-  .nav-links a:hover { color: var(--gold-light); }
+/* THE KEY PERMISSION BUTTON — big, obvious, impossible to miss */
+.perm-btn{
+  background:var(--gold);color:var(--black);border:none;
+  padding:16px 36px;font-family:'Syne',sans-serif;font-size:.82rem;font-weight:700;
+  letter-spacing:.14em;cursor:pointer;border-radius:6px;
+  transition:background .2s,transform .15s;
+  display:flex;align-items:center;gap:10px;
+  box-shadow:0 0 0 0 rgba(201,168,76,0);
+  animation:perm-pulse 2s ease infinite;
+}
+.perm-btn:hover{background:var(--gold-l);transform:translateY(-2px);}
+.perm-btn:active{transform:scale(.97);}
+.perm-btn.waiting{background:var(--surf2);color:var(--muted);cursor:wait;animation:none;}
+@keyframes perm-pulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.4);}50%{box-shadow:0 0 0 12px rgba(201,168,76,0);}}
 
-  .nav-cta {
-    background: transparent;
-    border: 1px solid var(--gold-dim);
-    color: var(--gold-light);
-    padding: 10px 24px;
-    font-family: 'Syne', sans-serif;
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    cursor: none;
-    transition: background 0.3s, color 0.3s;
-  }
-  .nav-cta:hover { background: var(--gold); color: var(--black); }
+.perm-note{font-size:.68rem;color:var(--muted);font-family:'Noto Sans Devanagari',sans-serif;}
 
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 0 60px;
-    position: relative;
-    overflow: hidden;
-  }
+/* Denied box */
+.denied{background:rgba(231,76,60,.08);border:1px solid rgba(231,76,60,.25);border-radius:8px;padding:16px 18px;max-width:320px;display:none;text-align:left;}
+.denied-h{font-size:.8rem;font-weight:700;color:var(--red);margin-bottom:8px;}
+.denied-steps{font-size:.74rem;color:var(--muted);line-height:1.9;font-family:'Noto Sans Devanagari',sans-serif;}
+.denied-steps ol{padding-left:16px;}
 
-  .hero-bg {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 60% 60% at 80% 50%, rgba(201,168,76,0.07) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 80% at 10% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
-  }
+/* Mic ring */
+.mic-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;padding:10px 0 18px;}
+.mic-ring{width:84px;height:84px;border-radius:50%;background:var(--surf2);border:2px solid #333;display:flex;align-items:center;justify-content:center;font-size:2rem;cursor:pointer;transition:all .25s;position:relative;}
+.mic-ring:hover{border-color:var(--gold-d);}
+.mic-ring.on{background:rgba(231,76,60,.18);border-color:var(--red);}
+.mic-ring.on::before,.mic-ring.on::after{content:'';position:absolute;border-radius:50%;border:1.5px solid var(--red);opacity:0;animation:ripple 1.4s ease infinite;}
+.mic-ring.on::before{inset:-10px;}
+.mic-ring.on::after{inset:-20px;animation-delay:.35s;}
+@keyframes ripple{0%{opacity:.5;transform:scale(1);}100%{opacity:0;transform:scale(1.15);}}
+.mic-st{font-size:.68rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
+.mic-st.live{color:var(--green);}
+.lang-row{display:flex;gap:6px;justify-content:center;margin-bottom:14px;}
+.lbtn{background:var(--surf2);border:1px solid #333;color:var(--muted);padding:7px 14px;font-family:'Syne',sans-serif;font-size:.65rem;font-weight:600;cursor:pointer;border-radius:3px;transition:all .2s;}
+.lbtn.active{background:rgba(201,168,76,.18);border-color:var(--gold-d);color:var(--gold-l);}
 
-  .hero-line {
-    position: absolute;
-    top: 50%;
-    right: 0;
-    width: 42%;
-    height: 1px;
-    background: linear-gradient(to left, transparent, var(--gold-dim));
-    opacity: 0.4;
-  }
+/* Camera */
+.cambox{background:#000;border-radius:6px;overflow:hidden;position:relative;aspect-ratio:4/3;max-height:270px;}
+.cambox video,.cambox img{width:100%;height:100%;object-fit:cover;display:block;}
+.cambox img{display:none;}
+.cbtns{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
+.cbtn{flex:1;min-width:68px;background:var(--surf2);border:1px solid #2a2a2a;color:var(--text);padding:10px 6px;font-family:'Syne',sans-serif;font-size:.65rem;font-weight:600;cursor:pointer;border-radius:4px;text-align:center;transition:background .2s;}
+.cbtn.p{background:var(--gold);color:var(--black);border-color:var(--gold);}
+.cbtn.p:hover{background:var(--gold-l);}
+.cbtn.d{background:rgba(231,76,60,.1);border-color:rgba(231,76,60,.3);color:var(--red);}
+.cbtn:disabled{opacity:.3;cursor:not-allowed;}
 
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    border: 1px solid var(--gold-dim);
-    padding: 8px 20px;
-    width: fit-content;
-    margin-bottom: 40px;
-    animation: fadeUp 0.8s ease both;
-  }
-  .hero-badge-dot {
-    width: 6px; height: 6px;
-    background: var(--gold);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-  }
-  .hero-badge span {
-    font-size: 0.65rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--gold-light);
-  }
+/* File zone */
+.fzone{border:2px dashed #2a2a2a;border-radius:8px;padding:32px 14px;text-align:center;cursor:pointer;transition:border-color .2s;position:relative;}
+.fzone:hover{border-color:var(--gold-d);}
+.fzone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.fzone-ico{font-size:2.6rem;margin-bottom:8px;}
+.fzone-t{font-family:'Syne',sans-serif;font-size:.82rem;font-weight:700;color:var(--gold-l);margin-bottom:4px;}
+.fzone-s{font-size:.72rem;color:var(--muted);line-height:1.6;font-family:'Noto Sans Devanagari',sans-serif;}
+.fprev{display:none;margin-top:12px;border-radius:6px;overflow:hidden;position:relative;background:#000;}
+.fprev img{width:100%;max-height:220px;object-fit:contain;display:block;}
+.fclr{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.75);border:none;color:var(--text);width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:.85rem;}
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(1.4); }
-  }
+/* Output */
+.olabel{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;}
+.cpbtn{background:none;border:1px solid #252525;color:var(--muted);padding:3px 10px;font-family:'Syne',sans-serif;font-size:.58rem;cursor:pointer;border-radius:3px;transition:all .2s;}
+.cpbtn:hover{border-color:var(--gold-d);color:var(--gold-l);}
+.obox{background:var(--surf2);border:1px solid #252525;border-radius:6px;padding:14px;min-height:88px;font-size:.82rem;line-height:1.75;color:var(--text);font-family:'Noto Sans Devanagari',sans-serif;font-weight:300;white-space:pre-wrap;word-break:break-word;position:relative;outline:none;}
+.obox:empty::before{content:'यहाँ output दिखेगा...';color:#383838;font-size:.72rem;}
+.obox.busy::after{content:'';position:absolute;bottom:10px;right:10px;width:14px;height:14px;border:2px solid var(--gold-d);border-top-color:var(--gold-l);border-radius:50%;animation:spin .6s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.prog{height:2px;background:#1e1e1e;margin:8px 0;border-radius:2px;overflow:hidden;}
+.prog-f{height:100%;background:var(--gold);border-radius:2px;width:0;transition:width .3s;}
+.prog-f.run{animation:prun 2s ease infinite;}
+@keyframes prun{0%{width:0;margin-left:0;}60%{width:65%;margin-left:20%;}100%{width:0;margin-left:100%;}}
+.arow{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.abtn{background:var(--surf2);border:1px solid #252525;color:var(--muted);padding:8px 13px;font-family:'Noto Sans Devanagari',sans-serif;font-size:.72rem;cursor:pointer;border-radius:4px;transition:all .2s;}
+.abtn:hover{border-color:var(--gold-d);color:var(--gold-l);}
+.abtn.p{background:var(--gold);color:var(--black);border-color:var(--gold);font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.1em;}
+.abtn.p:hover{background:var(--gold-l);}
+.abtn:disabled{opacity:.3;cursor:not-allowed;}
+.chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;}
+.chip{background:var(--surf2);border:1px solid #252525;color:var(--muted);padding:6px 11px;font-family:'Noto Sans Devanagari',sans-serif;font-size:.7rem;cursor:pointer;border-radius:4px;transition:all .2s;}
+.chip.active{background:rgba(201,168,76,.12);border-color:var(--gold-d);color:var(--gold-l);}
 
-  .hero-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(3.5rem, 8vw, 7rem);
-    font-weight: 300;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    animation: fadeUp 0.9s 0.1s ease both;
-  }
-  .hero-title em {
-    font-style: italic;
-    color: var(--gold-light);
-  }
-  .hero-title .devanagari {
-    font-family: 'Noto Sans Devanagari', 'Cormorant Garamond', serif;
-    display: block;
-    font-size: 0.55em;
-    color: var(--muted);
-    letter-spacing: 0.02em;
-    margin-bottom: 8px;
-  }
+/* Features */
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:32px;background:#1a1a1a;}
+@media(min-width:700px){.fgrid{grid-template-columns:repeat(4,1fr);}}
+.fc{background:var(--dark);padding:22px 18px;border-left:2px solid transparent;transition:all .25s;}
+.fc:hover{background:var(--surf);border-left-color:var(--gold);}
+.fcn{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;color:#1c1c1c;float:right;line-height:1;}
+.fci{font-size:1.5rem;margin-bottom:10px;display:block;}
+.fct{font-size:.83rem;font-weight:700;color:var(--white);margin-bottom:3px;}
+.fch{font-family:'Noto Sans Devanagari',sans-serif;font-size:.7rem;color:var(--gold-d);margin-bottom:8px;}
+.fcd{font-size:.7rem;color:var(--muted);line-height:1.6;font-family:'Noto Sans Devanagari',sans-serif;font-weight:300;}
 
-  .hero-sub {
-    margin-top: 28px;
-    max-width: 520px;
-    color: var(--muted);
-    font-size: 0.9rem;
-    line-height: 1.8;
-    letter-spacing: 0.02em;
-    animation: fadeUp 1s 0.2s ease both;
-    font-family: 'Noto Sans Devanagari', sans-serif;
-    font-weight: 300;
-  }
+footer{background:var(--surf);padding:32px 22px 24px;border-top:1px solid #1a1a1a;}
+.fb{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--gold-l);}
+.fc2{font-size:.6rem;color:#333;margin-top:12px;letter-spacing:.06em;}
 
-  .hero-actions {
-    margin-top: 50px;
-    display: flex;
-    gap: 20px;
-    animation: fadeUp 1s 0.3s ease both;
-  }
-
-  .btn-primary {
-    background: var(--gold);
-    color: var(--black);
-    border: none;
-    padding: 16px 40px;
-    font-family: 'Syne', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    cursor: none;
-    transition: background 0.3s, transform 0.2s;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
-
-  .btn-outline {
-    background: transparent;
-    color: var(--text);
-    border: 1px solid #333;
-    padding: 16px 40px;
-    font-family: 'Syne', sans-serif;
-    font-size: 0.75rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    cursor: none;
-    transition: border-color 0.3s, color 0.3s;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .btn-outline:hover { border-color: var(--gold-dim); color: var(--gold-light); }
-
-  .hero-stats {
-    position: absolute;
-    right: 60px;
-    bottom: 80px;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    animation: fadeUp 1s 0.4s ease both;
-  }
-  .hero-stat { text-align: right; }
-  .hero-stat-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2.8rem;
-    font-weight: 300;
-    color: var(--gold-light);
-    line-height: 1;
-  }
-  .hero-stat-label {
-    font-size: 0.6rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-top: 4px;
-  }
-
-  /* Scroll indicator */
-  .scroll-hint {
-    position: absolute;
-    bottom: 40px;
-    left: 60px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    animation: fadeUp 1s 0.5s ease both;
-  }
-  .scroll-hint-line {
-    width: 40px; height: 1px;
-    background: var(--gold-dim);
-    position: relative;
-    overflow: hidden;
-  }
-  .scroll-hint-line::after {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%;
-    width: 100%; height: 100%;
-    background: var(--gold-light);
-    animation: scanline 2s infinite;
-  }
-  @keyframes scanline { 0% { left: -100%; } 100% { left: 100%; } }
-  .scroll-hint span {
-    font-size: 0.6rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  /* DIVIDER */
-  .divider {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding: 0 60px;
-    margin: 20px 0;
-  }
-  .divider-line { flex: 1; height: 1px; background: #1e1e1e; }
-  .divider-mark {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.4rem;
-    color: var(--gold-dim);
-  }
-
-  /* SECTIONS */
-  section { padding: 100px 60px; }
-
-  .section-label {
-    font-size: 0.6rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--gold-dim);
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .section-label::before {
-    content: '';
-    width: 24px; height: 1px;
-    background: var(--gold-dim);
-  }
-
-  .section-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(2.2rem, 4vw, 3.5rem);
-    font-weight: 300;
-    line-height: 1.15;
-    max-width: 640px;
-  }
-  .section-title em { font-style: italic; color: var(--gold-light); }
-
-  /* FEATURES */
-  .features-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2px;
-    margin-top: 60px;
-    background: #1a1a1a;
-  }
-
-  .feature-card {
-    background: var(--dark);
-    padding: 48px 40px;
-    position: relative;
-    overflow: hidden;
-    transition: background 0.4s;
-    cursor: none;
-  }
-  .feature-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 2px; height: 0;
-    background: var(--gold);
-    transition: height 0.4s ease;
-  }
-  .feature-card:hover::before { height: 100%; }
-  .feature-card:hover { background: var(--surface); }
-
-  .feature-icon {
-    font-size: 2.2rem;
-    margin-bottom: 24px;
-    display: block;
-    filter: grayscale(0.4);
-    transition: filter 0.3s, transform 0.3s;
-  }
-  .feature-card:hover .feature-icon { filter: grayscale(0); transform: scale(1.1); }
-
-  .feature-num {
-    position: absolute;
-    top: 20px; right: 28px;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 4rem;
-    font-weight: 300;
-    color: #1c1c1c;
-    line-height: 1;
-    transition: color 0.4s;
-  }
-  .feature-card:hover .feature-num { color: #252525; }
-
-  .feature-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    margin-bottom: 12px;
-    color: var(--white);
-  }
-  .feature-title-hi {
-    font-family: 'Noto Sans Devanagari', sans-serif;
-    font-size: 0.85rem;
-    color: var(--gold-dim);
-    margin-bottom: 14px;
-    font-weight: 400;
-  }
-  .feature-desc {
-    font-size: 0.82rem;
-    color: var(--muted);
-    line-height: 1.7;
-    font-family: 'Noto Sans Devanagari', sans-serif;
-    font-weight: 300;
-  }
-
-  /* USE CASES */
-  .usecases { background: var(--surface); }
-
-  .usecases-split {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    margin-top: 60px;
-    align-items: start;
-  }
-
-  .usecase-list { display: flex; flex-direction: column; gap: 0; }
-  .usecase-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 24px;
-    padding: 28px 0;
-    border-bottom: 1px solid #252525;
-    cursor: none;
-    transition: padding-left 0.3s;
-  }
-  .usecase-item:hover { padding-left: 10px; }
-  .usecase-item:last-child { border-bottom: none; }
-
-  .usecase-arrow {
-    color: var(--gold-dim);
-    font-size: 1.2rem;
-    margin-top: 2px;
-    transition: color 0.3s, transform 0.3s;
-    flex-shrink: 0;
-  }
-  .usecase-item:hover .usecase-arrow { color: var(--gold-light); transform: translateX(4px); }
-
-  .usecase-title {
-    font-size: 0.95rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    margin-bottom: 6px;
-  }
-  .usecase-desc {
-    font-size: 0.78rem;
-    color: var(--muted);
-    line-height: 1.6;
-    font-family: 'Noto Sans Devanagari', sans-serif;
-  }
-
-  .usecase-visual {
-    position: sticky;
-    top: 120px;
-  }
-  .usecase-card-big {
-    background: var(--dark);
-    border: 1px solid #252525;
-    padding: 48px;
-    position: relative;
-    overflow: hidden;
-  }
-  .usecase-card-big::after {
-    content: '';
-    position: absolute;
-    bottom: -40px; right: -40px;
-    width: 160px; height: 160px;
-    border: 1px solid #252525;
-    border-radius: 50%;
-  }
-  .ucb-label {
-    font-size: 0.6rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--gold-dim);
-    margin-bottom: 20px;
-  }
-  .ucb-quote {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2rem;
-    font-weight: 300;
-    font-style: italic;
-    line-height: 1.4;
-    color: var(--white);
-    margin-bottom: 24px;
-  }
-  .ucb-quote-hi {
-    font-family: 'Noto Sans Devanagari', sans-serif;
-    font-size: 1rem;
-    color: var(--muted);
-    line-height: 1.7;
-    font-weight: 300;
-  }
-  .ucb-bar {
-    width: 40px; height: 2px;
-    background: var(--gold);
-    margin: 28px 0;
-  }
-  .ucb-sub {
-    font-size: 0.7rem;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  /* GOAL */
-  .goal-section {
-    padding: 100px 60px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 100px;
-    align-items: center;
-  }
-
-  .goal-text .section-label { margin-bottom: 20px; }
-  .goal-body {
-    margin-top: 28px;
-    font-size: 0.9rem;
-    line-height: 1.9;
-    color: var(--muted);
-    font-family: 'Noto Sans Devanagari', sans-serif;
-    font-weight: 300;
-  }
-
-  .goal-pillars {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-  .goal-pillar {
-    background: var(--surface);
-    padding: 28px 32px;
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    transition: background 0.3s;
-    cursor: none;
-  }
-  .goal-pillar:hover { background: var(--surface2); }
-  .pillar-icon { font-size: 1.6rem; flex-shrink: 0; }
-  .pillar-label {
-    font-size: 0.75rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 4px;
-  }
-  .pillar-value {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.5rem;
-    color: var(--gold-light);
-    font-style: italic;
-  }
-
-  /* TAGLINE BAND */
-  .tagline-band {
-    background: var(--gold);
-    padding: 30px 60px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    overflow: hidden;
-  }
-  .tagline-band-text {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.8rem;
-    font-weight: 300;
-    color: var(--black);
-    font-style: italic;
-    white-space: nowrap;
-    animation: marquee 18s linear infinite;
-  }
-  @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-
-  /* CTA */
-  .cta-section {
-    padding: 120px 60px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .cta-bg {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(201,168,76,0.06) 0%, transparent 70%);
-  }
-  .cta-ornament {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 500px; height: 500px;
-    border: 1px solid rgba(201,168,76,0.06);
-    border-radius: 50%;
-    pointer-events: none;
-  }
-  .cta-ornament::after {
-    content: '';
-    position: absolute;
-    inset: 30px;
-    border: 1px solid rgba(201,168,76,0.04);
-    border-radius: 50%;
-  }
-
-  .cta-section .section-label { justify-content: center; }
-  .cta-section .section-label::before { display: none; }
-  .cta-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
-    font-weight: 300;
-    margin-top: 20px;
-    line-height: 1.1;
-  }
-  .cta-title em { color: var(--gold-light); font-style: italic; }
-  .cta-sub {
-    margin: 20px auto 0;
-    max-width: 500px;
-    color: var(--muted);
-    font-size: 0.85rem;
-    line-height: 1.7;
-    font-family: 'Noto Sans Devanagari', sans-serif;
-    font-weight: 300;
-  }
-  .cta-actions {
-    margin-top: 48px;
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-  }
-
-  /* FOOTER */
-  footer {
-    background: var(--surface);
-    padding: 60px 60px 40px;
-    border-top: 1px solid #1a1a1a;
-  }
-  .footer-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding-bottom: 40px;
-    border-bottom: 1px solid #1a1a1a;
-    margin-bottom: 32px;
-  }
-  .footer-brand {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--gold-light);
-    letter-spacing: 0.1em;
-  }
-  .footer-brand p {
-    font-family: 'Noto Sans Devanagari', sans-serif;
-    font-size: 0.75rem;
-    color: var(--muted);
-    margin-top: 8px;
-    font-weight: 300;
-    letter-spacing: 0.05em;
-  }
-  .footer-links { display: flex; gap: 32px; flex-wrap: wrap; }
-  .footer-links a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 0.72rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    transition: color 0.3s;
-  }
-  .footer-links a:hover { color: var(--gold-light); }
-  .footer-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .footer-copy {
-    font-size: 0.65rem;
-    color: #3a3a3a;
-    letter-spacing: 0.1em;
-  }
-  .footer-tagline {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 0.9rem;
-    font-style: italic;
-    color: var(--gold-dim);
-  }
-
-  /* MOBILE */
-  @media (max-width: 768px) {
-    nav { padding: 20px 24px; }
-    .nav-links { display: none; }
-    .hero { padding: 120px 24px 80px; }
-    section { padding: 70px 24px; }
-    .features-grid { grid-template-columns: 1fr; }
-    .usecases-split { grid-template-columns: 1fr; }
-    .goal-section { grid-template-columns: 1fr; gap: 48px; padding: 70px 24px; }
-    .hero-stats { right: 24px; }
-    .tagline-band { padding: 20px 24px; }
-    .cta-section { padding: 80px 24px; }
-    footer { padding: 40px 24px 28px; }
-    .footer-top { flex-direction: column; gap: 28px; }
-    .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
-    .usecase-visual { display: none; }
-  }
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surf2);border:1px solid var(--gold-d);color:var(--text);padding:10px 18px;border-radius:6px;font-size:.73rem;z-index:999;transition:transform .3s;white-space:nowrap;max-width:90vw;text-align:center;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-thumb{background:#252525;border-radius:4px;}
+@media(min-width:600px){nav{padding:16px 48px;}.tools,.hero{padding-left:48px;padding-right:48px;}}
 </style>
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-
-<!-- NAV -->
 <nav>
-  <div class="nav-logo">EKAANT <span>International</span></div>
-  <ul class="nav-links">
-    <li><a href="#features">Features</a></li>
-    <li><a href="#usecases">Use Cases</a></li>
-    <li><a href="#about">About</a></li>
-  </ul>
-  <button class="nav-cta">Start Now →</button>
+  <div class="nav-logo">EKAANT <small>International AI Typing</small></div>
+  <button class="nav-btn" onclick="document.getElementById('tools').scrollIntoView({behavior:'smooth'})">🛠 Tools</button>
 </nav>
 
 <!-- HERO -->
 <section class="hero" id="home">
-  <div class="hero-bg"></div>
-  <div class="hero-line"></div>
-
-  <div class="hero-badge">
-    <div class="hero-badge-dot"></div>
-    <span>AI-Powered Typing System • Live</span>
-  </div>
-
-  <h1 class="hero-title">
-    <span class="devanagari">एकांत इंटरनेशनल</span>
-    Type <em>Smarter,</em><br>Work <em>Faster.</em>
-  </h1>
- <p class="hero-sub">
-    AI की शक्ति से typing को नई परिभाषा दें — Voice, Image, PDF और official documents सब कुछ एक platform पर।
-  </p>
-
-  <div class="hero-actions">
-    <a href="#features" class="btn-primary">✦ Explore Features</a>
-    <a href="#about" class="btn-outline">Learn More →</a>
-  </div>
-
-  <div class="hero-stats">
-    <div class="hero-stat">
-      <div class="hero-stat-num">4×</div>
-      <div class="hero-stat-label">Faster Typing</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">99%</div>
-      <div class="hero-stat-label">Accuracy</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">∞</div>
-      <div class="hero-stat-label">Formats</div>
-    </div>
-  </div>
-
-  <div class="scroll-hint">
-    <div class="scroll-hint-line"></div>
-    <span>Scroll to explore</span>
-  </div>
+  <div class="badge"><span class="bdot"></span><span>Camera · Mic · File — AI Ready</span></div>
+  <h1><span class="hi">एकांत इंटरनेशनल</span>Type <em>Smarter,</em><br>Work <em>Faster.</em></h1>
+  <p class="hsub">Mobile का Camera, Microphone और Gallery सीधे AI से connect करें। Permission button दबाते ही browser device access माँगेगा।</p>
+  <button class="hbtn" onclick="document.getElementById('tools').scrollIntoView({behavior:'smooth'})">✦ AI Tools शुरू करें</button>
 </section>
 
-<div class="divider"><div class="divider-line"></div><div class="divider-mark">✦</div><div class="divider-line"></div></div>
+<!-- TOOLS SECTION -->
+<section class="tools" id="tools">
+  <div class="slabel">Live AI Tools</div>
+  <h2 class="stitle">Device-Connected <em>AI Typing</em></h2>
 
-<!-- FEATURES -->
-<section id="features">
-  <div class="section-label">Core Features</div>
-  <h2 class="section-title">चार शक्तिशाली<br><em>AI उपकरण</em></h2>
-
-  <div class="features-grid">
-    <div class="feature-card">
-      <span class="feature-num">01</span>
-      <span class="feature-icon">🎤</span>
-      <div class="feature-title">Voice Typing</div>
-      <div class="feature-title-hi">आवाज़ से टाइपिंग</div>
-      <p class="feature-desc">Hindi और English दोनों भाषाओं में बोलकर type करें। Real-time transcription के साथ बेहद सटीक परिणाम पाएं।</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-num">02</span>
-      <span class="feature-icon">📷</span>
-      <div class="feature-title">Image to Text</div>
-      <div class="feature-title-hi">फोटो / हस्तलेख से टेक्स्ट</div>
-      <p class="feature-desc">किसी भी handwritten note या printed image को editable text में convert करें — OCR AI से powered।</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-num">03</span>
-      <span class="feature-icon">📄</span>
-      <div class="feature-title">PDF to Document</div>
-      <div class="feature-title-hi">PDF से संपादन योग्य दस्तावेज़</div>
-      <p class="feature-desc">किसी भी PDF को editable Word document में बदलें। Formatting, tables और layout सब preserve रहता है।</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-num">04</span>
-      <span class="feature-icon">🧾</span>
-      <div class="feature-title">Official Formatting</div>
-      <div class="feature-title-hi">आधिकारिक दस्तावेज़ formatting</div>
-      <p class="feature-desc">सरकारी, legal और professional documents को सही format में तैयार करें — letter heads, notices, applications सब।</p>
-    </div>
+  <div class="tabs">
+    <button class="tab active" onclick="sw('voice',this)"><span class="tab-ico">🎤</span>Voice</button>
+    <button class="tab" onclick="sw('camera',this)"><span class="tab-ico">📷</span>Camera</button>
+    <button class="tab" onclick="sw('file',this)"><span class="tab-ico">📁</span>File</button>
+    <button class="tab" onclick="sw('fmt',this)"><span class="tab-ico">✍️</span>Format</button>
   </div>
-</section>
 
-<div class="divider"><div class="divider-line"></div><div class="divider-mark">✦</div><div class="divider-line"></div></div>
+  <!-- ======== VOICE PANEL ======== -->
+  <div id="panel-voice" class="panel active">
+    <div class="card">
+      <div class="card-h"><div class="card-ico">🎤</div><div><div class="card-t">Voice Typing</div><div class="card-s">बोलें → AI सुने → Text बनाएं</div></div></div>
+      <div class="card-b">
 
-<!-- USE CASES -->
-<section class="usecases" id="usecases">
-  <div class="section-label">Use Cases</div>
-  <h2 class="section-title">हर काम के लिए<br><em>सही समाधान</em></h2>
+        <!-- GATE -->
+        <div id="vgate" class="gate">
+          <div class="gate-icon">🎤</div>
+          <div class="gate-chip">Permission ज़रूरी है</div>
+          <div class="gate-title">Microphone Access</div>
+          <div class="gate-desc">नीचे button दबाएं — browser आपसे Microphone permission माँगेगा। Allow करते ही recording शुरू हो सकती है।</div>
+          <button class="perm-btn" id="vgbtn" onclick="askMic()">
+            🎤 &nbsp;Microphone Allow करें
+          </button>
+          <div class="perm-note">👆 Button दबाने पर browser popup खुलेगा</div>
+          <div class="denied" id="vdenied">
+            <div class="denied-h">❌ Microphone Blocked है — Fix करें:</div>
+            <div class="denied-steps"><ol>
+              <li>Address bar में 🔒 icon tap करें</li>
+              <li>"Site Settings" खोलें</li>
+              <li>Microphone → <b>Allow</b> करें</li>
+              <li>Page reload करें, फिर try करें</li>
+            </ol></div>
+          </div>
+        </div>
 
-  <div class="usecases-split">
-    <div class="usecase-list">
-      <div class="usecase-item">
-        <span class="usecase-arrow">→</span>
-        <div>
-          <div class="usecase-title">🏢 Office Work</div>
-          <p class="usecase-desc">दफ्तर के रोज़ाना के typing कार्य जैसे reports, minutes of meeting, correspondence — सब AI से handle करें।</p>
-        </div>
-      </div>
-      <div class="usecase-item">
-        <span class="usecase-arrow">→</span>
-        <div>
-          <div class="usecase-title">⚖️ सरकारी & Legal Documents</div>
-          <p class="usecase-desc">RTI, affidavit, शपथपत्र, application forms को सही format में तैयार करने का सबसे आसान तरीका।</p>
-        </div>
-      </div>
-      <div class="usecase-item">
-        <span class="usecase-arrow">→</span>
-        <div>
-          <div class="usecase-title">🎓 Students & Typing Work</div>
-          <p class="usecase-desc">Notes digitize करें, assignments type करें, handwriting को text में बदलें — पढ़ाई आसान बनाएं।</p>
-        </div>
-      </div>
-      <div class="usecase-item">
-        <span class="usecase-arrow">→</span>
-        <div>
-          <div class="usecase-title">💻 Freelance Typing Services</div>
-          <p class="usecase-desc">Freelancers के लिए ideal — bulk typing work जल्दी और सटीक complete करें, अधिक projects लें।</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="usecase-visual">
-      <div class="usecase-card-big">
-        <div class="ucb-label">Platform Vision</div>
-        <div class="ucb-quote">"Your Digital Typing Partner"</div>
-        <div class="ucb-bar"></div>
-        <div class="ucb-quote-hi">
-          Typing work को automate करके time और मेहनत दोनों बचाएं। एक ऐसा digital platform जो हर भारतीय की ज़रूरत को समझे।
+        <!-- VOICE UI -->
+        <div id="vui" style="display:none;">
+          <div class="lang-row">
+            <button class="lbtn active" onclick="setL('hi-IN',this)">हिंदी</button>
+            <button class="lbtn" onclick="setL('en-IN',this)">English</button>
+            <button class="lbtn" onclick="setL('hi-IN',this)">Mixed</button>
+          </div>
+          <div class="mic-wrap">
+            <div class="mic-ring" id="mring" onclick="toggleRec()">🎤</div>
+            <div class="mic-st" id="mst">बोलने के लिए Mic दबाएं</div>
+          </div>
+          <div class="prog"><div class="prog-f" id="vbar"></div></div>
+          <div class="olabel">Raw Transcript <button class="cpbtn" onclick="cp('vraw')">Copy</button></div>
+          <div class="obox" id="vraw" contenteditable="true" spellcheck="false"></div>
+          <div class="arow">
+            <button class="abtn p" onclick="refine()">✦ AI से सुधारें</button>
+            <button class="abtn" onclick="document.getElementById('vraw').textContent='';document.getElementById('vout').textContent=''">🗑 Clear</button>
+          </div>
+          <div style="margin-top:14px;">
+            <div class="olabel">AI Refined Output <button class="cpbtn" onclick="cp('vout')">Copy</button></div>
+            <div class="obox" id="vout" contenteditable="true" spellcheck="false"></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</section>
 
-<!-- TAGLINE BAND -->
-<div class="tagline-band" aria-hidden="true">
-  <div class="tagline-band-text">
-    ✦ तेज • सटीक • विश्वसनीय &nbsp;&nbsp;&nbsp; ✦ Fast • Accurate • Reliable &nbsp;&nbsp;&nbsp; ✦ आपका डिजिटल टाइपिंग पार्टनर &nbsp;&nbsp;&nbsp; ✦ Your AI-Powered Typing Solution &nbsp;&nbsp;&nbsp; ✦ तेज • सटीक • विश्वसनीय &nbsp;&nbsp;&nbsp; ✦ Fast • Accurate • Reliable &nbsp;&nbsp;&nbsp; ✦ आपका डिजिटल टाइपिंग पार्टनर &nbsp;&nbsp;&nbsp;
-  </div>
-</div>
+  <!-- ======== CAMERA PANEL ======== -->
+  <div id="panel-camera" class="panel">
+    <div class="card">
+      <div class="card-h"><div class="card-ico">📷</div><div><div class="card-t">Camera to Text (OCR)</div><div class="card-s">Photo लें → AI Text निकाले</div></div></div>
+      <div class="card-b">
 
-<!-- ABOUT / GOAL -->
-<div class="goal-section" id="about">
-  <div class="goal-text">
-    <div class="section-label">Our Goal</div>
-    <h2 class="section-title">Mission &<br><em>Vision</em></h2>
-    <p class="goal-body">
-      Ekaant International AI Typing System का लक्ष्य है — एक ऐसा digital platform बनाना जो typing work को automate करे, समय बचाए, और हर वर्ग के user के लिए accessible हो।<br><br>
-      चाहे आप एक student हों, government clerk, legal professional, या freelancer — हमारा AI आपके हर typing ज़रूरत को पूरा करने में सक्षम है।
-    </p>
-  </div>
+        <!-- GATE -->
+        <div id="cgate" class="gate">
+          <div class="gate-icon">📷</div>
+          <div class="gate-chip">Permission ज़रूरी है</div>
+          <div class="gate-title">Camera Access</div>
+          <div class="gate-desc">Document, handwriting या board की photo लें — AI तुरंत सारा text निकाल देगा। नीचे button दबाएं।</div>
+          <button class="perm-btn" id="cgbtn" onclick="askCam()">
+            📷 &nbsp;Camera Allow करें
+          </button>
+          <div class="perm-note">👆 Button दबाने पर browser popup खुलेगा</div>
+          <div class="denied" id="cdenied">
+            <div class="denied-h">❌ Camera Blocked है — Fix करें:</div>
+            <div class="denied-steps"><ol>
+              <li>Address bar में 🔒 icon tap करें</li>
+              <li>Camera → <b>Allow</b> करें</li>
+              <li>Page reload करें, फिर try करें</li>
+            </ol></div>
+          </div>
+        </div>
 
-  <div class="goal-pillars">
-    <div class="goal-pillar">
-      <span class="pillar-icon">⚡</span>
-      <div>
-        <div class="pillar-label">Speed</div>
-        <div class="pillar-value">4× Faster</div>
-      </div>
-    </div>
-    <div class="goal-pillar">
-      <span class="pillar-icon">🎯</span>
-      <div>
-        <div class="pillar-label">Accuracy</div>
-        <div class="pillar-value">99% Precise</div>
-      </div>
-    </div>
-    <div class="goal-pillar">
-      <span class="pillar-icon">🌐</span>
-      <div>
-        <div class="pillar-label">Language</div>
-        <div class="pillar-value">Hindi + English</div>
-      </div>
-    </div>
-    <div class="goal-pillar">
-      <span class="pillar-icon">🔒</span>
-      <div>
-        <div class="pillar-label">Trust</div>
-        <div class="pillar-value">Secure & Private</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- CTA -->
-<section class="cta-section">
-  <div class="cta-bg"></div>
-  <div class="cta-ornament"></div>
-  <div style="position:relative; z-index:1;">
-    <div class="section-label">Get Started</div>
-    <h2 class="cta-title">Typing का<br><em>नया युग</em> शुरू करें</h2>
-    <p class="cta-sub">अभी join करें और AI-powered typing की शक्ति को खुद महसूस करें। Fast, Accurate, Reliable।</p>
-    <div class="cta-actions">
-      <a href="#" class="btn-primary">✦ Get Started Free</a>
-      <a href="#features" class="btn-outline">View Features →</a>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-top">
-    <div class="footer-brand">
-      EKAANT International
-      <p>एकांत इंटरनेशनल AI टाइपिंग सिस्टम</p>
-      <p style="margin-top:6px;">A GBSB4U / GBSBFORYOU Publication Initiative</p>
-    </div>
-    <div class="footer-links">
-      <a href="#features">Features</a>
-      <a href="#usecases">Use Cases</a>
-      <a href="#about">About</a>
-      <a href="#">Contact</a>
-      <a href="#">Privacy</a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <div class="footer-copy">© 2025 Ekaant International AI Typing System. All rights reserved.</div>
-    <div class="footer-tagline">तेज • सटीक • विश्वसनीय</div>
-  </div>
-</footer>
-
-<script>
-  // Custom Cursor
-  const cursor = document.getElementById('cursor');
-  const ring = document.getElementById('cursorRing');
-  let mx = 0, my = 0, rx = 0, ry = 0;
-
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    cursor.style.left = mx + 'px';
-    cursor.style.top = my + 'px';
-  });
-
-  function animateRing() {
-    rx += (mx - rx) * 0.12;
-    ry += (my - ry) * 0.12;
-    ring.style.left = rx + 'px';
-    ring.style.top = ry + 'px';
-    requestAnimationFrame(animateRing);
-  }
-  animateRing();
-
-  document.querySelectorAll('a, button, .feature-card, .usecase-item, .goal-pillar').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cursor.style.width = '18px';
-      cursor.style.height = '18px';
-      ring.style.width = '50px';
-      ring.style.height = '50px';
-    });
-    el.addEventListener('mouseleave', () => {
-      cursor.style.width = '10px';
-      cursor.style.height = '10px';
-      ring.style.width = '36px';
-      ring.style.height = '36px';
-    });
-  });
-
-  // Scroll-triggered fade-in
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
-      }
-    });
-  }, { threshold: 0.12 });
-
-  document.querySelectorAll('.feature-card, .usecase-item, .goal-pillar, .usecase-card-big').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(28px)';
-    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    observer.observe(el);
-  });
-
-  // Smooth scroll for nav links
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const target = document.querySelector(a.getAttribute('href'));
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    });
-  });
-</script>
-</body>
-  </html>
-      
+        <!-- CAMERA UI -->
+        <div id="cui" style="display:none;">
+          <div class="cambox">
+            <video id="cvid" autoplay playsinline muted></video>
+            <img id="csnap" alt="" style="display:none;">
+          </div>
+          <div class="cbtns">
+            <button class="cbtn p" id="snapbtn" onclick="snap()">📸 Photo लें</button>
+            <button class="cbtn" id="flipbtn" onclick="flip()">🔄 Flip</button>
+            <button class="cbtn" id="retakebtn" onclick="retake()" style="display:none;">↩ Retake</button>
+            <button class="cbtn d" onclick="stopCam()">✕ बंद करें</button>
+          </div>
+          <div class="chips" style="margin-top:12px;">
+            <span style="font-size:.58rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);align-self:center;">मोड:</span>
+       
